@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -9,51 +9,37 @@ import Paper from "@mui/material/Paper";
 import {
   Button,
   Checkbox,
+  Grid,
   IconButton,
   MenuItem,
   TextField,
+  Typography,
 } from "@mui/material";
 import styled from "@emotion/styled";
-import { Delete } from "@mui/icons-material";
+// icons
+import { Delete, AddCircleOutlined } from "@mui/icons-material";
+import { IState as Props } from "../pages/Invoice";
 
-interface InputFields {
-  id: "string";
-  startDate: "string";
-  endDate: "string";
-  credit: "string";
-  active: "boolean";
-  item_num: "string";
-  desc: "string";
-  unit: "string";
-  price: "string";
-  gst_code: "string";
-  amount: "string";
+interface IProps {
+  rowCount: Props["rowCount"];
+  setRowCount: React.Dispatch<React.SetStateAction<Props["rowCount"]>>;
+  grandTotal: Props["grandTotal"];
+  setGrandTotal: React.Dispatch<React.SetStateAction<Props["grandTotal"]>>;
 }
 
-const initialData = {
-  id: new Date().getDate() * Math.floor(Math.random() * 1000),
-  startDate: "",
-  endDate: "",
-  credit: "",
-  active: false,
-  item_num: "",
-  desc: "",
-  unit: "",
-  price: "",
-  gst_code: "",
-  amount: "",
-};
-
-export default function TableView() {
-  const [rowCount, setRowCount] = useState([initialData]);
-
+const TableView: React.FC<IProps> = ({
+  rowCount,
+  setRowCount,
+  grandTotal,
+  setGrandTotal,
+}) => {
   const handleRowCount = () => {
     setRowCount([
       ...rowCount,
       {
         id: new Date().getDate() * Math.floor(Math.random() * 1000),
-        startDate: "",
-        endDate: "",
+        start_date: "",
+        end_date: "",
         credit: "",
         active: false,
         item_num: "",
@@ -66,12 +52,14 @@ export default function TableView() {
     ]);
   };
 
+  // Delete item row
   const handleDeleteRow = (index: number) => {
     const values = [...rowCount];
     values.splice(index, 1);
     setRowCount(values);
   };
 
+  // Save items in object
   const handleFormData = (
     index: number,
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -81,6 +69,7 @@ export default function TableView() {
     setRowCount(values);
   };
 
+  // Save checkbox status in object
   const handleCheckboxData = (
     index: number,
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -90,10 +79,12 @@ export default function TableView() {
     setRowCount(values);
   };
 
-  const handleConsole = (e) => {
-    e.preventDefault();
-    console.log("submit", rowCount);
-  };
+  // Refresh total when amount changes
+  useEffect(() => {
+    let total = 0;
+    rowCount.map((item, index) => (total = total + Number(item["amount"])));
+    setGrandTotal(total);
+  }, [rowCount]);
 
   return (
     <Root>
@@ -125,10 +116,10 @@ export default function TableView() {
                     size="small"
                     id="start"
                     variant="outlined"
-                    type={"date"}
+                    type="date"
                     className="date_input"
-                    name="startDate"
-                    value={row.startDate}
+                    name="start_date"
+                    value={row.start_date}
                     onChange={(e) => handleFormData(index, e)}
                   />
                 </TableCell>
@@ -137,10 +128,10 @@ export default function TableView() {
                     size="small"
                     id="end"
                     variant="outlined"
-                    type={"date"}
-                    name="endDate"
+                    type="date"
+                    name="end_date"
                     className="date_input"
-                    value={row.endDate}
+                    value={row.end_date}
                     onChange={(e) => handleFormData(index, e)}
                   />
                 </TableCell>
@@ -229,7 +220,6 @@ export default function TableView() {
                     id="amount"
                     name="amount"
                     variant="outlined"
-                    disabled
                     value={row.amount}
                     onChange={(e) => handleFormData(index, e)}
                   />
@@ -246,12 +236,32 @@ export default function TableView() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Button variant="outlined" onClick={handleRowCount}>
-        Add Item
-      </Button>
+      <Grid container spacing={3}>
+        <Grid item xs={6}>
+          <Button
+            variant="outlined"
+            onClick={handleRowCount}
+            startIcon={<AddCircleOutlined />}
+          >
+            Add Item
+          </Button>
+        </Grid>
+        <Grid item xs={6}>
+          <Typography
+            variant="h6"
+            component={"div"}
+            textAlign="end"
+            className="totalTxt"
+          >
+            Total : {grandTotal}
+          </Typography>
+        </Grid>
+      </Grid>
     </Root>
   );
-}
+};
+
+export default TableView;
 
 const Root = styled("div")((theme) => ({
   "& .MuiPaper-root": {
@@ -262,5 +272,8 @@ const Root = styled("div")((theme) => ({
   },
   "& .date_input": {
     maxWidth: "127px",
+  },
+  "& .totalTxt": {
+    marginRight: "50px",
   },
 }));
