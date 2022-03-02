@@ -1,7 +1,7 @@
-import { HttpClient } from "../utils/httpClient";
+import { HttpClient } from "../../utils/httpClient";
 
 const PATH = {
-  createInvoice: "create",
+  createInvoice: "invoice/create",
   upload: "invoice/upload",
 };
 
@@ -21,7 +21,7 @@ const uploadInvoice = (payload, start, callback, error, next) => {
     .finally(next);
 };
 
-export const InvoiceService = {
+export const InvoiceAPI = {
   createInvoice,
   uploadInvoice,
 };

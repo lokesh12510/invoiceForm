@@ -9,9 +9,9 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
+import styled from "@emotion/styled";
 
 const pages = [
   { title: "Participants", link: "/invoice-list" },
@@ -22,12 +22,12 @@ const pages = [
   { title: "Reports", link: "/invoice-list" },
   { title: "Staff", link: "/invoice-list" },
 ];
-const settings = ["Logout"];
 
 const Appbar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
+  // eslint-disable-next-line
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
@@ -43,12 +43,8 @@ const Appbar = () => {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
-
   return (
-    <AppBar position="static">
+    <Root position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -127,12 +123,23 @@ const Appbar = () => {
 
           <Box sx={{ flexGrow: 0 }}>
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar alt="Lokesh" src="/static/images/avatar/2.jpg" />
+              <Avatar
+                alt="Lokesh"
+                src="/static/images/avatar/2.jpg"
+                sx={{ width: 32, height: 32 }}
+              />
             </IconButton>
           </Box>
         </Toolbar>
       </Container>
-    </AppBar>
+    </Root>
   );
 };
 export default Appbar;
+
+const Root = styled(AppBar)((theme) => ({
+  "& .MuiToolbar-root": {
+    minHeight: "60px",
+    height: "60px",
+  },
+}));
