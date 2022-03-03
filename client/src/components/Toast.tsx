@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Snackbar } from "@mui/material";
-import { useAppContext } from "../Context";
+import { useAppContext } from "../App/Context";
 
 const Toast = ({ message, type }) => {
   // eslint-disable-next-line

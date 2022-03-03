@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
-import InvoiceList from "./features/invoice/InvoiceList";
-import Invoice from "./features/invoice/Invoice";
+import InvoiceList from "./Pages/InvoiceList/InvoiceList";
+import InvoiceForm from "./Pages/InvoiceForm/InvoiceForm";
 import Appbar from "./components/Appbar";
 import Toast from "./components/Toast";
-import { useAppContext } from "./Context";
+import { useAppContext } from "./App/Context";
 import { CircularProgress } from "@mui/material";
 function App() {
   const { state, dispatch } = useAppContext();
@@ -37,7 +37,7 @@ function App() {
 
       <Appbar />
       <Routes>
-        <Route path="/" element={<Invoice />} />
+        <Route path="/" element={<InvoiceForm />} />
         <Route path="/invoice-list" element={<InvoiceList />} />
       </Routes>
     </div>

@@ -7,7 +7,7 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter as Router } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
 import { DefaultTheme } from "./theme/DefaultTheme";
-import { AppStateProvider } from "./Context";
+import { AppStateProvider } from "./App/Context";
 
 ReactDOM.render(
   <React.StrictMode>

@@ -22,10 +22,10 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { IState } from "./type";
 import { DefaultTheme } from "../../theme/DefaultTheme";
 
-import { useAppContext } from "../../Context";
+import { useAppContext } from "../../App/Context";
 import { Link } from "react-router-dom";
 
-const Invoice = () => {
+const InvoiceForm = () => {
   const budgetOptions = [
     { key: "select an option", value: "" },
     { key: "Core", value: "Core" },
@@ -440,7 +440,7 @@ const Invoice = () => {
   );
 };
 
-export default Invoice;
+export default InvoiceForm;
 
 const Root = styled("div")((theme) => ({
   paddingBlock: "10px",
