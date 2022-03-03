@@ -3,6 +3,7 @@ import { Alert, Snackbar } from "@mui/material";
 import { useAppContext } from "../Context";
 
 const Toast = ({ message, type }) => {
+  // eslint-disable-next-line
   const { state, dispatch } = useAppContext();
 
   useEffect(() => {
