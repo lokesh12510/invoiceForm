@@ -19,3 +19,8 @@ export interface IState {
   total_amount: number;
   image: File | null;
 }
+
+export interface TotalState {
+  grandTotal: number;
+  setGrandTotal: React.Dispatch<React.SetStateAction<number>>;
+}

@@ -2,28 +2,24 @@ import {
   Button,
   Container,
   Grid,
-  IconButton,
-  TableCell,
-  TableRow,
   Typography,
   Stack,
   Divider,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { Formik, Form, FieldArray } from "formik";
-// Styles
-import { styled } from "@mui/material/styles";
+import React, { useState } from "react";
+import { Formik, Form } from "formik";
 import { InvoiceAPI } from "./InvoiceAPI";
 import { InvoiceValidationSchema } from "../../validationSchema/InvoiceFormValidation";
 import FormikControl from "../../components/FormikControl/FormikControl";
 import InvoiceTableContainer from "./InvoiceTableContainer";
-import { AddCircleOutlined, Delete } from "@mui/icons-material";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { IState } from "./type";
-import { DefaultTheme } from "../../theme/DefaultTheme";
-
 import { useAppContext } from "../../App/Context";
 import { Link } from "react-router-dom";
+// Styles
+import { styled } from "@mui/material/styles";
+import { DefaultTheme } from "../../theme/DefaultTheme";
+// Icons
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 const InvoiceForm = () => {
   const budgetOptions = [
@@ -32,16 +28,11 @@ const InvoiceForm = () => {
     { key: "Capital", value: "Capital" },
     { key: "Capacity Building", value: "Capacity Building" },
   ];
-  const creditOptions = [
-    { key: "Credit", value: "Credit" },
-    { key: "Cash", value: "Cash" },
-  ];
-
-  const checkboxOptions = [{ key: "Active", value: "Active" }];
 
   const [grandTotal, setGrandTotal] = useState(0);
   const [inv_image, setInv_image] = useState("");
 
+  // InitialState
   const initialValues: IState = {
     provider_name: "",
     participant_name: "",
@@ -66,6 +57,7 @@ const InvoiceForm = () => {
     image: null,
   };
 
+  // Check for file type
   const handleInvImage = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       if (/^image\//.test(e.target.files[0].type)) {
@@ -77,12 +69,14 @@ const InvoiceForm = () => {
     }
   };
 
+  // eslint-disable-next-line
   const { state, dispatch } = useAppContext();
-  console.log(state);
 
   const onSubmit = (values, onSubmitProps) => {
     onSubmitProps.setSubmitting(false);
     onSubmitProps.resetForm();
+
+    // Generate FormData
     const formData = new FormData();
     formData.append("provider_name", values.provider_name);
     formData.append("participant_name", values.participant_name);
@@ -92,6 +86,8 @@ const InvoiceForm = () => {
     formData.append("total_amount", grandTotal.toString());
     formData.append("inv_items", JSON.stringify(values.inv_items));
     formData.append("image", inv_image);
+
+    // Create Invoice Service call
     InvoiceAPI.createInvoice(
       formData,
       () => {
@@ -103,28 +99,21 @@ const InvoiceForm = () => {
         dispatch({ type: "STOP_LOADING" });
       }
     );
-
     setInv_image("");
   };
 
   const handleSuccessData = (data) => {
-    console.log(data);
     dispatch({
       type: "SHOW_MSG",
       payload: { type: "success", message: data.data.message },
     });
   };
   const handleError = (err) => {
-    console.log(err);
     dispatch({
       type: "SHOW_MSG",
       payload: { type: "error", message: "Error Occurred!" },
     });
   };
-
-  useEffect(() => {
-    console.log(inv_image);
-  }, [inv_image]);
 
   return (
     <Root>
@@ -150,7 +139,6 @@ const InvoiceForm = () => {
         </Stack>
         <Divider />
         <Formik
-          // innerRef={ref}
           initialValues={initialValues}
           validationSchema={InvoiceValidationSchema}
           onSubmit={onSubmit}
@@ -218,176 +206,11 @@ const InvoiceForm = () => {
                   </Grid>
 
                   <Grid item xs={12} mb={{ xs: "10px", md: "0px" }}>
-                    <FieldArray name="inv_items">
-                      {(fieldArrayProps) => {
-                        const { push, remove, form } = fieldArrayProps;
-                        const { values } = form;
-                        const { inv_items } = values;
-                        setGrandTotal(0);
-                        return (
-                          <Grid container>
-                            <Grid item xs={12}>
-                              <InvoiceTableContainer>
-                                {inv_items.map((item, index) => {
-                                  // total += Number(item.amount);
-                                  setGrandTotal(
-                                    (total) => total + Number(item.amount)
-                                  );
-                                  return (
-                                    <TableRow
-                                      key={index}
-                                      sx={{
-                                        "&:last-child td, &:last-child th": {
-                                          border: 0,
-                                        },
-                                      }}
-                                    >
-                                      <TableCell>
-                                        <FormikControl
-                                          control="date"
-                                          tableField="true"
-                                          variant="outlined"
-                                          size="small"
-                                          id="start_date"
-                                          name={`inv_items.${index}.start_date`}
-                                          className="date_input"
-                                        />
-                                      </TableCell>
-                                      <TableCell>
-                                        <FormikControl
-                                          control="date"
-                                          tableField="true"
-                                          variant="outlined"
-                                          size="small"
-                                          id="end_date"
-                                          name={`inv_items.${index}.end_date`}
-                                          className="date_input"
-                                        />
-                                      </TableCell>
-                                      <TableCell>
-                                        <FormikControl
-                                          tableField="true"
-                                          control="select"
-                                          variant="outlined"
-                                          size="small"
-                                          id="credit"
-                                          label="Select credit"
-                                          name={`inv_items.${index}.credit`}
-                                          options={creditOptions}
-                                        />
-                                      </TableCell>
-                                      <TableCell>
-                                        <FormikControl
-                                          tableField="true"
-                                          control="checkbox"
-                                          variant="outlined"
-                                          size="small"
-                                          id="active"
-                                          label="Select active"
-                                          name={`inv_items.${index}.active`}
-                                          options={checkboxOptions}
-                                        />
-                                      </TableCell>
-                                      <TableCell>
-                                        <FormikControl
-                                          tableField="true"
-                                          control="input"
-                                          label="item_num"
-                                          name={`inv_items.${index}.item_num`}
-                                          variant="outlined"
-                                          size="small"
-                                        />
-                                      </TableCell>
-                                      <TableCell>
-                                        <FormikControl
-                                          tableField="true"
-                                          control="textarea"
-                                          label="description"
-                                          name={`inv_items.${index}.desc`}
-                                          variant="outlined"
-                                          size="small"
-                                        />
-                                      </TableCell>
-                                      <TableCell>
-                                        <FormikControl
-                                          tableField="true"
-                                          control="input"
-                                          label="unit"
-                                          name={`inv_items.${index}.unit`}
-                                          variant="outlined"
-                                          size="small"
-                                        />
-                                      </TableCell>
-                                      <TableCell>
-                                        <FormikControl
-                                          tableField="true"
-                                          control="input"
-                                          label="price"
-                                          name={`inv_items.${index}.price`}
-                                          variant="outlined"
-                                          size="small"
-                                        />
-                                      </TableCell>
-                                      <TableCell>
-                                        <FormikControl
-                                          tableField="true"
-                                          control="input"
-                                          label="gst_code"
-                                          name={`inv_items.${index}.gst_code`}
-                                          variant="outlined"
-                                          size="small"
-                                        />
-                                      </TableCell>
-                                      <TableCell>
-                                        <FormikControl
-                                          tableField="true"
-                                          control="input"
-                                          label="amount"
-                                          name={`inv_items.${index}.amount`}
-                                          variant="outlined"
-                                          size="small"
-                                        />
-                                      </TableCell>
-                                      <TableCell>
-                                        {index > 0 && (
-                                          <IconButton
-                                            onClick={() => remove(index)}
-                                          >
-                                            <Delete />
-                                          </IconButton>
-                                        )}
-                                      </TableCell>
-                                    </TableRow>
-                                  );
-                                })}
-                              </InvoiceTableContainer>
-                            </Grid>
-                            <Grid item xs={6}>
-                              <Button
-                                variant="outlined"
-                                type="button"
-                                onClick={() => push(initialValues.inv_items[0])}
-                                startIcon={<AddCircleOutlined />}
-                                color="secondary"
-                              >
-                                Add Item
-                              </Button>
-                            </Grid>
-                            <Grid item xs={6}>
-                              <Typography
-                                variant="h5"
-                                component={"p"}
-                                textAlign="end"
-                                className="totalTxt"
-                                color={"secondary"}
-                              >
-                                Total : {grandTotal}
-                              </Typography>
-                            </Grid>
-                          </Grid>
-                        );
-                      }}
-                    </FieldArray>
+                    {/* Items table Container */}
+                    <InvoiceTableContainer
+                      setGrandTotal={setGrandTotal}
+                      grandTotal={grandTotal}
+                    />
                   </Grid>
                   <Grid item xs={12}>
                     <label htmlFor="contained-button-file">

@@ -33,7 +33,11 @@ const Toast = ({ message, type }) => {
       }}
       sx={{ bottom: { xs: 0, sm: 30 } }}
     >
-      <Alert severity={type} variant="filled" sx={{ width: "100%" }}>
+      <Alert
+        severity={type || "success"}
+        variant="filled"
+        sx={{ width: "100%" }}
+      >
         {message}
       </Alert>
     </Snackbar>
