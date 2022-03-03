@@ -14,13 +14,13 @@ import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
 
 const pages = [
-  { title: "Participants", link: "/invoice-list" },
-  { title: "Providers", link: "/invoice-list" },
-  { title: "Invoices", link: "/invoice-list" },
-  { title: "Transactions", link: "/invoice-list" },
-  { title: "Statements", link: "/invoice-list" },
-  { title: "Reports", link: "/invoice-list" },
-  { title: "Staff", link: "/invoice-list" },
+  { title: "Participants", link: "/" },
+  { title: "Providers", link: "/" },
+  { title: "Invoices", link: "/" },
+  { title: "Transactions", link: "/" },
+  { title: "Statements", link: "/" },
+  { title: "Reports", link: "/" },
+  { title: "Staff", link: "/" },
 ];
 
 const Appbar = () => {

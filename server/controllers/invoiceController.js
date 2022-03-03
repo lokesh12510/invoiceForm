@@ -17,33 +17,34 @@ const createInvoice = async (req, res) => {
   if (isNaN(Number(req.body.inv_number))) {
     res.status(400).json({ message: "Invalid input!" });
   }
-  const provider_name = req.body.provider_name;
-  const budget_allocation = req.body.budget_allocation;
-  const participant_name = req.body.participant_name;
+  if (
+    !["Core", "Capital", "Capacity Building"].includes(
+      req.body.budget_allocation
+    )
+  ) {
+    res.status(400).json({ message: "Invalid input!" });
+  }
+
   const inv_number = req.body.inv_number;
-  const inv_date = req.body.inv_date;
-  const total_amount = req.body.total_amount;
   const inv_items = JSON.parse(req.body.inv_items);
-
-  // cloudinary.v2.uploader.upload(file, options, callback);
-  const result = await cloudinary.uploader.upload(req.file.path);
-
-  let inv_doc = result.secure_url;
-
-  console.log(inv_doc);
-
-  let sql = `CALL create_invoice(?,?,?,?,?,?,?)`;
+  let invoiceImage = null;
+  console.log(req.file);
+  if (req.file) {
+    // cloudinary.v2.uploader.upload(file, options, callback);
+    const result = await cloudinary.uploader.upload(req.file.path);
+    invoiceImage = result.secure_url;
+  }
 
   db.query(
-    sql,
+    `CALL create_invoice(?,?,?,?,?,?,?)`,
     [
-      provider_name,
-      budget_allocation,
-      participant_name,
-      inv_number,
-      inv_date,
-      total_amount,
-      inv_doc,
+      req.body.provider_name,
+      req.body.budget_allocation,
+      req.body.participant_name,
+      req.body.inv_number,
+      req.body.inv_date,
+      req.body.total_amount,
+      invoiceImage,
     ],
     (err, result) => {
       if (err) {
@@ -73,7 +74,9 @@ const createInvoice = async (req, res) => {
               if (err) {
                 console.log(err);
               } else {
-                res.status(200).json("Invoice Inserted!");
+                res
+                  .status(200)
+                  .json({ message: "Invoice Inserted Successfully!" });
               }
             }
           );

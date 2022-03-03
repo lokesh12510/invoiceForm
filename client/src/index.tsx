@@ -7,14 +7,17 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter as Router } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
 import { DefaultTheme } from "./theme/DefaultTheme";
+import { AppStateProvider } from "./Context";
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme={DefaultTheme}>
-      <Router>
-        <App />
-      </Router>
-    </ThemeProvider>
+    <AppStateProvider>
+      <ThemeProvider theme={DefaultTheme}>
+        <Router>
+          <App />
+        </Router>
+      </ThemeProvider>
+    </AppStateProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

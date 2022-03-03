@@ -7,8 +7,9 @@ import {
   TableRow,
   Typography,
   Stack,
+  Divider,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Formik, Form, FieldArray } from "formik";
 // Styles
 import { styled } from "@mui/material/styles";
@@ -20,6 +21,9 @@ import { AddCircleOutlined, Delete } from "@mui/icons-material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { IState } from "./type";
 import { DefaultTheme } from "../../theme/DefaultTheme";
+
+import { useAppContext } from "../../Context";
+import { Link } from "react-router-dom";
 
 const Invoice = () => {
   const budgetOptions = [
@@ -73,6 +77,9 @@ const Invoice = () => {
     }
   };
 
+  const { state, dispatch } = useAppContext();
+  console.log(state);
+
   const onSubmit = (values, onSubmitProps) => {
     onSubmitProps.setSubmitting(false);
     onSubmitProps.resetForm();
@@ -88,12 +95,12 @@ const Invoice = () => {
     InvoiceAPI.createInvoice(
       formData,
       () => {
-        console.log("started");
+        dispatch({ type: "START_LOADING" });
       },
       handleSuccessData,
       handleError,
       () => {
-        console.log("ended");
+        dispatch({ type: "STOP_LOADING" });
       }
     );
 
@@ -102,9 +109,17 @@ const Invoice = () => {
 
   const handleSuccessData = (data) => {
     console.log(data);
+    dispatch({
+      type: "SHOW_MSG",
+      payload: { type: "success", message: data.data.message },
+    });
   };
   const handleError = (err) => {
     console.log(err);
+    dispatch({
+      type: "SHOW_MSG",
+      payload: { type: "error", message: "Error Occurred!" },
+    });
   };
 
   useEffect(() => {
@@ -114,9 +129,26 @@ const Invoice = () => {
   return (
     <Root>
       <Container className="bg_container" maxWidth="xl">
-        <Typography variant="h5" mb={5} component="div">
-          Create Invoice
-        </Typography>
+        <Stack
+          direction={"row"}
+          alignItems="center"
+          justifyContent="space-between"
+          mb={2}
+        >
+          <Typography variant="h5" component="div" color={"secondary"}>
+            Create Invoice
+          </Typography>
+          <Button
+            component={Link}
+            to="/invoice-list"
+            variant="outlined"
+            size="small"
+            color="secondary"
+          >
+            View Invoice
+          </Button>
+        </Stack>
+        <Divider />
         <Formik
           // innerRef={ref}
           initialValues={initialValues}
@@ -185,7 +217,7 @@ const Invoice = () => {
                     />
                   </Grid>
 
-                  <Grid item xs={12}>
+                  <Grid item xs={12} mb={{ xs: "10px", md: "0px" }}>
                     <FieldArray name="inv_items">
                       {(fieldArrayProps) => {
                         const { push, remove, form } = fieldArrayProps;
@@ -336,16 +368,18 @@ const Invoice = () => {
                                 type="button"
                                 onClick={() => push(initialValues.inv_items[0])}
                                 startIcon={<AddCircleOutlined />}
+                                color="secondary"
                               >
                                 Add Item
                               </Button>
                             </Grid>
                             <Grid item xs={6}>
                               <Typography
-                                variant="h6"
-                                component={"div"}
+                                variant="h5"
+                                component={"p"}
                                 textAlign="end"
                                 className="totalTxt"
+                                color={"secondary"}
                               >
                                 Total : {grandTotal}
                               </Typography>
@@ -373,6 +407,7 @@ const Invoice = () => {
                           border: `1px dashed ${DefaultTheme.palette.primary.main}`,
                           padding: "15px",
                         }}
+                        className="uploadDiv"
                       >
                         <Button
                           variant="outlined"
@@ -408,10 +443,13 @@ const Invoice = () => {
 export default Invoice;
 
 const Root = styled("div")((theme) => ({
-  paddingBlock: "30px",
+  paddingBlock: "10px",
   "& .bg_container": {
     backgroundColor: "#a7afb72b",
     padding: "20px 20px",
+    "& .form": {
+      marginTop: "30px",
+    },
   },
   "& .MuiOutlinedInput-input": {
     padding: "8.5px 14px",
@@ -430,6 +468,12 @@ const Root = styled("div")((theme) => ({
   },
   "& .submitBtn": {
     minWidth: "240px",
+  },
+  "& .uploadDiv": {
+    cursor: "pointer",
+    "&:hover": {
+      backgroundColor: `${DefaultTheme.palette.primary.main}0f`,
+    },
   },
 
   "@media (min-width: 600px)": {

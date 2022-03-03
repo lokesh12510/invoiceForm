@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Snackbar } from "@mui/material";
+import { useAppContext } from "../Context";
 
-const Toast = ({ children, type }) => {
+const Toast = ({ message, type }) => {
+  const { state, dispatch } = useAppContext();
+
   useEffect(() => {
     setOpen(true);
-    setTimeout(() => {}, 5000);
-  }, []);
+    setTimeout(() => {
+      dispatch({ type: "CLEAR_MSG" });
+    }, 5000);
+  }, [message, dispatch]);
 
   const [open, setOpen] = useState(true);
 
@@ -28,7 +33,7 @@ const Toast = ({ children, type }) => {
       sx={{ bottom: { xs: 0, sm: 30 } }}
     >
       <Alert severity={type} variant="filled" sx={{ width: "100%" }}>
-        {children}
+        {message}
       </Alert>
     </Snackbar>
   );
