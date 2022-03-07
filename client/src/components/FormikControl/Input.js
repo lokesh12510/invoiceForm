@@ -45,10 +45,10 @@ function Input(props) {
             id={name}
             {...field}
             {...rest}
+            type={type}
             label={label}
             value={value}
             onChange={(e) => setFieldValue(name, e.target.value)}
-            helperText={<ErrorMessage name={name} />}
           />
         );
       }}

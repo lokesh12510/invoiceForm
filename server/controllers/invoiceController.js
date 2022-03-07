@@ -48,7 +48,7 @@ const createInvoice = async (req, res) => {
     ],
     (err, result) => {
       if (err) {
-        console.log(err);
+        res.status(400).json({ message: err });
       } else {
         if (inv_number) {
           const values = [];
@@ -72,7 +72,7 @@ const createInvoice = async (req, res) => {
             [values],
             (err, result) => {
               if (err) {
-                console.log(err);
+                res.status(400).json({ message: err });
               } else {
                 res
                   .status(200)
@@ -88,13 +88,54 @@ const createInvoice = async (req, res) => {
 // @desc    Get Invoice List
 // @route   GET /api/invoice
 // @access  Private
+function promiseQuery(query) {
+  return new Promise((resolve, reject) => {
+    db.query(query, (err, data) => {
+      if (err) {
+        reject(err);
+      }
+
+      resolve(data);
+
+      return;
+    });
+  });
+}
 const getInvoiceList = (req, res) => {
-  db.query("SELECT * FROM invoice", (err, result) => {
+  db.query("SELECT * FROM invoice", async (err, result) => {
     if (err) {
-      console.log(err);
+      // res.status(400).json({ message: err });
+      return;
     } else {
       const data = JSON.stringify(result);
-      res.send(JSON.parse(data));
+      let invoiceData = [];
+      let length;
+      // res.status(200).json(JSON.parse(data));
+      for (let resultItem of result) {
+        let invoice = `select * FROM item_lists as l WHERE l.inv_number=${resultItem.inv_number}`;
+        let invoiceItem = resultItem;
+        let item = await promiseQuery(invoice);
+        invoiceItem["length"] = item.length;
+        console.log(item, invoiceItem, "item");
+        invoiceData.push(invoiceItem);
+        // db.query(invoice, (err, countResult) => {
+        //   if (err) {
+        //     // res.status(400).json({ message: err });
+        //     return;
+        //   } else {
+        //     console.log("countResult.length");
+        // item["length"] = countResult.length;
+        // console.log(item);
+        // invoiceData.push(item);
+        //     length = countResult.length;
+        //     return;
+        //   }
+        // });
+        console.log("first", invoiceData);
+      }
+      res.status(200).json({
+        data: invoiceData,
+      });
     }
   });
 };
@@ -108,10 +149,10 @@ const getInvoice = (req, res) => {
   console.log("invoice", id);
   db.query(invoice, (err, result) => {
     if (err) {
-      console.log(err);
+      res.status(400).json({ message: err });
     } else {
       const data = JSON.stringify(result);
-      res.send(JSON.parse(data));
+      res.status(200).json(JSON.parse(data));
     }
   });
 };

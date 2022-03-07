@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
-import InvoiceList from "./Pages/InvoiceList/InvoiceList";
 import InvoiceForm from "./Pages/InvoiceForm/InvoiceForm";
 import Appbar from "./components/Appbar";
 import Toast from "./components/Toast";
 import { useAppContext } from "./App/Context";
 import { CircularProgress } from "@mui/material";
+import InvoiceListContainer from "./Pages/InvoiceList/InvoiceListContainer";
 function App() {
   const { state, dispatch } = useAppContext();
 
@@ -38,7 +38,7 @@ function App() {
       <Appbar />
       <Routes>
         <Route path="/" element={<InvoiceForm />} />
-        <Route path="/invoice-list" element={<InvoiceList />} />
+        <Route path="/invoice-list" element={<InvoiceListContainer />} />
       </Routes>
     </div>
   );

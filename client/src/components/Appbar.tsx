@@ -44,7 +44,7 @@ const Appbar = () => {
   };
 
   return (
-    <Root position="static">
+    <Root position="sticky">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography

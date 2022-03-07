@@ -2,10 +2,10 @@ const mysql = require("mysql");
 
 // connect DB
 const db = mysql.createConnection({
-  user: "root",
-  host: "localhost",
-  password: "",
-  database: "invoice_db",
+  user: "sql6476679",
+  host: "sql6.freemysqlhosting.net",
+  password: "WfKCVFS5xH",
+  database: "sql6476679",
 });
 
 module.exports = db;
