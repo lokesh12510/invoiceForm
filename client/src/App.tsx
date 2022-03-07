@@ -21,6 +21,7 @@ function App() {
       {!state.loading && state.message.data && (
         <Toast type={state.message.type} message={state.message.data} />
       )}
+
       {state.loading && (
         <CircularProgress
           style={{

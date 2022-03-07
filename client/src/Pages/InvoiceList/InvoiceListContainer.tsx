@@ -43,6 +43,7 @@ export default function InvoiceListContainer() {
 
   const [invoiceList, setInvoiceList] = useState<InvoiceTableState[]>([]);
 
+  // Get Invoice List Service Call
   useEffect(() => {
     InvoiceAPI.getInvoiceList(
       {},
@@ -59,6 +60,7 @@ export default function InvoiceListContainer() {
   }, []);
 
   const handleSuccessData = (data) => {
+    // Handling Success Data
     setInvoiceList(data.data.data);
   };
   const handleError = (err) => {

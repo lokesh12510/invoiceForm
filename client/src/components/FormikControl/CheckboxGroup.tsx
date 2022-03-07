@@ -1,6 +1,5 @@
 import React from "react";
-import { Field, ErrorMessage, FastField } from "formik";
-import ErrorText from "./ErrorText";
+import { Field, FastField } from "formik";
 import { Checkbox } from "@mui/material";
 
 function CheckboxGroup(props) {
@@ -29,7 +28,6 @@ function CheckboxGroup(props) {
           });
         }}
       </Field>
-      <ErrorMessage component={ErrorText} name={name} />
     </div>
   ) : (
     <FastField name={name}>
