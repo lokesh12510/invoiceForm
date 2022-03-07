@@ -78,13 +78,7 @@ export default function InvoiceListContainer() {
         <Typography variant="h5" component="div" color={"secondary"}>
           Invoice List
         </Typography>
-        <Button
-          component={Link}
-          to="/"
-          variant="outlined"
-          size="small"
-          color="secondary"
-        >
+        <Button component={Link} to="/" variant="outlined" color="secondary">
           Add Invoice
         </Button>
       </Stack>

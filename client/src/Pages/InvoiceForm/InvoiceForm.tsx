@@ -131,7 +131,6 @@ const InvoiceForm = () => {
             component={Link}
             to="/invoice-list"
             variant="outlined"
-            size="small"
             color="secondary"
           >
             View Invoice
