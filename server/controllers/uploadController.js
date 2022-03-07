@@ -4,12 +4,7 @@ const { cloudinary } = require("../utils/cloudinary");
 // @route   POST /api/tools/upload
 // @access  Private
 const uploadImage = async (req, res) => {
-  console.log("File", req.file);
-
-  // cloudinary.v2.uploader.upload(file, options, callback);
   const result = await cloudinary.uploader.upload(req.file.path);
-
-  console.log(result, "res");
 
   const post_details = {
     title: new Date(),

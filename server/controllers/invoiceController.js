@@ -94,9 +94,7 @@ function promiseQuery(query) {
       if (err) {
         reject(err);
       }
-
       resolve(data);
-
       return;
     });
   });
@@ -107,34 +105,17 @@ const getInvoiceList = (req, res) => {
       // res.status(400).json({ message: err });
       return;
     } else {
-      const data = JSON.stringify(result);
       let invoiceData = [];
-      let length;
-      // res.status(200).json(JSON.parse(data));
       for (let resultItem of result) {
         let invoice = `select * FROM item_lists as l WHERE l.inv_number=${resultItem.inv_number}`;
         let invoiceItem = resultItem;
         let item = await promiseQuery(invoice);
         invoiceItem["length"] = item.length;
-        console.log(item, invoiceItem, "item");
         invoiceData.push(invoiceItem);
-        // db.query(invoice, (err, countResult) => {
-        //   if (err) {
-        //     // res.status(400).json({ message: err });
-        //     return;
-        //   } else {
-        //     console.log("countResult.length");
-        // item["length"] = countResult.length;
-        // console.log(item);
-        // invoiceData.push(item);
-        //     length = countResult.length;
-        //     return;
-        //   }
-        // });
-        console.log("first", invoiceData);
       }
+      const data = invoiceData.reverse();
       res.status(200).json({
-        data: invoiceData,
+        data: data,
       });
     }
   });
