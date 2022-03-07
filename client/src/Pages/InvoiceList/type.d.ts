@@ -1,3 +1,4 @@
+// Interface for invoiceList state from api
 export interface InvoiceTableState {
   id: number;
   provider_name: string;

@@ -23,6 +23,8 @@ export function useAppContext() {
   return useContext(AppStateContext);
 }
 
+// Global State for loading & Alert messages
+
 export const AppStateProvider = ({ children }) => {
   const reducer = (state = initialState, action) => {
     switch (action.type) {

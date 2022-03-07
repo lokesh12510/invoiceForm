@@ -35,7 +35,7 @@ npm start
 
 ## Environment Variables
 
-To run this project, you will need to add the following **Cloudinary** environment variables to your .env file
+To run this project, you will need to add the following **Cloudinary** environment variables to your server .env file
 
 `API_KEY`
 

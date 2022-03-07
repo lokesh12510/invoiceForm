@@ -1,3 +1,4 @@
+// Interface for Invoice Form state
 export interface IState {
   provider_name: string;
   participant_name: string;
@@ -20,6 +21,7 @@ export interface IState {
   image: File | null;
 }
 
+// Interface for grandTotal state
 export interface TotalState {
   grandTotal: number;
   setGrandTotal: React.Dispatch<React.SetStateAction<number>>;
