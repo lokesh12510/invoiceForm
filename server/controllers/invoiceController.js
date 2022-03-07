@@ -35,8 +35,6 @@ const createInvoice = async (req, res) => {
     invoiceImage = result.secure_url;
   }
 
-  console.log(req.body.inv_date);
-
   db.query(
     `CALL create_invoice(?,?,?,?,?,?,?)`,
     [
