@@ -1,6 +1,5 @@
 import React from "react";
 import { Field, ErrorMessage, FastField } from "formik";
-import ErrorText from "./ErrorText";
 import MobileDateTimePicker from "@mui/lab/MobileDateTimePicker";
 import { Grid, TextField } from "@mui/material";
 import AdapterMoment from "@mui/lab/AdapterMoment";
@@ -29,9 +28,7 @@ function DatePicker(props) {
                       className={className}
                       {...props}
                       error={errors[name] && touched[name]}
-                      helperText={
-                        <ErrorMessage component={ErrorText} name={name} />
-                      }
+                      helperText={<ErrorMessage name={name} />}
                     />
                   )}
                   id={name}
@@ -39,9 +36,7 @@ function DatePicker(props) {
                   {...rest}
                   label={label}
                   value={value}
-                  onChange={(val) =>
-                    setFieldValue(name, val ? val._d.toISOString() : "")
-                  }
+                  onChange={(val) => setFieldValue(name, val ? val : "")}
                 />
               </LocalizationProvider>
             );
@@ -62,7 +57,8 @@ function DatePicker(props) {
                   {...props}
                   error={errors[name] && touched[name]}
                   helperText={
-                    <ErrorMessage component={ErrorText} name={name} />
+                    // <ErrorMessage component={ErrorText} name={name} />
+                    <ErrorMessage name={name} />
                   }
                 />
               )}
@@ -72,7 +68,8 @@ function DatePicker(props) {
               label={label}
               value={value}
               onChange={(val) =>
-                setFieldValue(name, val ? val._d.toISOString() : "")
+                // setFieldValue(name, val ? val._d.toISOString() : "")
+                setFieldValue(name, val ? val : "")
               }
             />
           </LocalizationProvider>

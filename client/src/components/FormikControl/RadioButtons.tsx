@@ -1,6 +1,5 @@
 import React from "react";
-import { Field, ErrorMessage } from "formik";
-import ErrorText from "./ErrorText";
+import { Field } from "formik";
 
 function RadioButtons(props) {
   const { label, name, options, ...rest } = props;
@@ -26,7 +25,6 @@ function RadioButtons(props) {
           });
         }}
       </Field>
-      <ErrorMessage component={ErrorText} name={name} />
     </div>
   );
 }

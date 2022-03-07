@@ -35,6 +35,8 @@ const createInvoice = async (req, res) => {
     invoiceImage = result.secure_url;
   }
 
+  console.log(req.body.inv_date);
+
   db.query(
     `CALL create_invoice(?,?,?,?,?,?,?)`,
     [
@@ -42,7 +44,7 @@ const createInvoice = async (req, res) => {
       req.body.budget_allocation,
       req.body.participant_name,
       req.body.inv_number,
-      req.body.inv_date,
+      new Date(req.body.inv_date).toISOString(),
       req.body.total_amount,
       invoiceImage,
     ],
@@ -55,8 +57,8 @@ const createInvoice = async (req, res) => {
 
           for (let i = 0; i < inv_items.length; i++) {
             values.push([
-              [inv_items[i].start_date],
-              [inv_items[i].end_date],
+              new Date([inv_items[i].start_date]).toISOString(),
+              new Date([inv_items[i].end_date]).toISOString(),
               [inv_number],
               [inv_items[i].active],
               [inv_items[i].desc],
